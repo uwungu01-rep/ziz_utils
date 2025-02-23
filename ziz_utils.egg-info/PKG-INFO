@@ -1,3 +1,23 @@
+Metadata-Version: 2.2
+Name: ziz_utils
+Version: 2.0.0
+Summary: A collection of Python function that I used in my projects.
+Home-page: https://github.com/uwungu01-rep/ziz_utils
+Author: Zizel
+Author-email: danbua999@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: summary
+
 # Ziz's Utilities - Python Edition
 
 A collection of Python function that I used in my projects.
