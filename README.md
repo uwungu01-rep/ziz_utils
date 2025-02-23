@@ -42,7 +42,7 @@ Or:
 from ziz_utils import <function_name> #With function_name as the, well, function name.
 ```
 
-# Requirement(s)
+## Requirement(s)
 1. Python 3.x
 
 ## License
