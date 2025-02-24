@@ -125,7 +125,7 @@ def write_config(def_config: dict, config: dict, config_folder: str, config_file
 
 def config_manager(def_config: dict, config_folder: str, config_file_name: str) -> None:
     """
-    Check the config file to see if it's valid or not. Create new config folder if not exist, write new config folder if config doesn't exist or corrupted.
+    Check the config file to see if it's valid or not. Create new config folder if not exist, write new config file if config doesn't exist or corrupted.
 
     :type def_config: dict
     :param def_config: The default config.
@@ -141,29 +141,31 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
     if not isinstance(config_file_name, str):
         raise TypeError(f"Parameter 'config_file_name' expect type str, got {type(config_file_name).__name__} instead.")
 
+    makedirs(config_folder, exist_ok=True)
     config_path = fr"{config_folder}\{config_file_name}"
-    try:
-        makedirs(config_folder)
-    except FileExistsError:
-        ...
-    
-    try:
-        with open(config_path) as file:
-            file.read()
-    except FileNotFoundError:
+
+    if not path.exists(config_path):
         with open(config_path, "w") as temp:
-            json.dump(def_config, temp, ensure_ascii = False, indent = 4)
-            return
+            json.dump(def_config, temp, ensure_ascii=False, indent=4)
+        return
     
-    with open(config_path) as file:
-        config = json.load(file)
-
-    with open(config_path, "w") as file:
-        if def_config.keys() != config.keys():
-            json.dump(config, file, ensure_ascii = False, indent = 4)
+    try:
+        with open(config_path, "r") as file:
+            config = json.load(file)
+    except json.JSONDecodeError:
+        with open(config_path, "w") as file:
+            json.dump(def_config, file, ensure_ascii=False, indent=4)
+        return
+    
+    if def_config.keys() != config.keys():
+        with open(config_path, "w") as file:
+            json.dump(def_config, file, ensure_ascii=False, indent=4)
+        return
+    
+    for key in def_config.keys():
+        if isinstance(config.get(key), dict):
+            config[key] = config.get(key, {})
+        elif type(config.get(key)) != type(def_config[key]):
+            with open(config_path, "w") as file:
+                json.dump(def_config, file, ensure_ascii=False, indent=4)
             return
-
-        for i in config.keys():
-            if type(config[i]) != type(def_config[i]):
-                json.dump(def_config, file, ensure_ascii = False, indent = 4)
-                break
