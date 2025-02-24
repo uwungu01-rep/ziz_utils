@@ -95,7 +95,7 @@ def menu(config: Container, start: int = 1, trailing_dot: bool = True, roman_num
 
 def write_config(def_config: dict, config: dict, config_folder: str, config_file_name: str):
     """
-    Write config to its file, automatically generate new config file (from def_config if config doesn't exist or corrupted).
+    Write config to its file, automatically generate new config file (from def_config) if config doesn't exist or corrupted.
 
     :type def_config: dict
     :param def_config: The default config.
@@ -121,7 +121,7 @@ def write_config(def_config: dict, config: dict, config_folder: str, config_file
             json.dump(config, temp, ensure_ascii = False, indent = 4)
     except FileNotFoundError:
         config_manager(def_config, config_folder, config_file_name)
-        write_config(config_path, config)
+        write_config(config_path, config, config_folder, config_file_name)
 
 def config_manager(def_config: dict, config_folder: str, config_file_name: str) -> None:
     """
