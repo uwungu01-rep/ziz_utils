@@ -7,7 +7,7 @@ def isInt(input: str) -> bool:
     """
     Check if input(of type str) an integer or not. Return True if yes, else return False.
     """
-    if not isinstance(input, int):
+    if isinstance(input, int):
         raise ValueError("Already an int.")
     if not isinstance(input, str):
         raise TypeError(f"Parameter 'input' expect str, got {type(input).__name__} instead.")
