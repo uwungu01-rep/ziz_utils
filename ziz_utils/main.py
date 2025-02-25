@@ -48,7 +48,13 @@ def num_to_roman(input: int) -> str:
 
     return roman
 
-def menu(config: Container, start: int = 1, trailing_dot: bool = True, roman_numeral_mode: bool = False) -> str:
+def menu(config: Container,
+         option_prefix: str = "".strip(),
+         option_suffix: str = "".strip(),
+         start: int = 1,
+         trailing_dot: bool = True,
+         roman_numeral_mode: bool = False
+         ) -> str:
     """
     Generate the options in a menu.
 
@@ -58,6 +64,10 @@ def menu(config: Container, start: int = 1, trailing_dot: bool = True, roman_num
     + For any container but dict, the items in the said container will be the option for the menu.
     + For dict, the keys in the dict will the options and the value.
     + Do note that whitespace in str will also count into the option.
+    :type option_prefix: str
+    :param option_prefix: The prefix of the options. Empty by default.
+    :type option_suffix: str
+    :param option_suffix: The suffix of the options. Empty by default.
     :type start: int
     :param start: Accept int. Specify where to start generate a menu. Default is 1.
     :type trailing_dot: bool
@@ -67,6 +77,10 @@ def menu(config: Container, start: int = 1, trailing_dot: bool = True, roman_num
     """
     if not isinstance(config, Container):
         raise TypeError(f"Parameter 'config' expect container type (e.g list, str, dict,...), got {type(config).__name__} instead.")
+    if not isinstance(option_prefix, Container):
+        raise TypeError(f"Parameter 'option_prefix' expect type str, got {type(config).__name__} instead.")
+    if not isinstance(option_suffix, Container):
+        raise TypeError(f"Parameter 'option_suffix' expect type str, got {type(config).__name__} instead.")
     if not isinstance(start, int):
         raise TypeError(f"Parameter 'start' expect int, got {type(start).__name__} instead.")
     if not isinstance(trailing_dot, bool):
@@ -76,18 +90,23 @@ def menu(config: Container, start: int = 1, trailing_dot: bool = True, roman_num
     if isinstance(config, dict):
         config = [x for x in config.keys()]
 
+    if option_prefix:
+        option_prefix += " "
+    if option_suffix:
+        option_suffix = " " + option_suffix
+
     output = ""
     for i in range(start, len(config) + start):
         if not roman_numeral_mode:
             if trailing_dot:
-                output += f"{i}. {config[i - start]}."
+                output += f"{i}. {option_prefix}{config[i - start]}{option_suffix}."
             else:
-                output += f"{i}. {config[i - start]}"
+                output += f"{i}. {option_prefix}{config[i - start]}{option_suffix}"
         else:
             if trailing_dot:
-                output += f"{num_to_roman(i)}. {config[i - start]}."
+                output += f"{num_to_roman(i)}. {option_prefix}{config[i - start]}{option_suffix}."
             else:
-                output += f"{num_to_roman(i)}. {config[i - start]}"
+                output += f"{num_to_roman(i)}. {option_prefix}{config[i - start]}{option_suffix}"
         
         if i - start + 1 < len(config):
             output += "\n"
