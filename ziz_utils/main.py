@@ -119,7 +119,7 @@ def write_config(def_config: dict, config: dict, config_folder: str, config_file
     :type def_config: dict
     :param def_config: The default config.
     :type config: dict
-    :param def_config: Config that.
+    :param config: The config.
     :type config_folder: str
     :param config_folder: The path to the folder contains the config file.
     :type config_file_name: str
@@ -134,7 +134,7 @@ def write_config(def_config: dict, config: dict, config_folder: str, config_file
     if not isinstance(config_file_name, str):
         raise TypeError(f"Parameter 'config_file_name' expect type str, got {type(config_file_name).__name__} instead.")
 
-    config_path = fr"{config_folder}\{config_file_name}"
+    config_path = path.join(config_folder, config_file_name)
     try:
         with open(config_path, "w") as temp:
             json.dump(config, temp, ensure_ascii = False, indent = 4)
@@ -161,7 +161,7 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
         raise TypeError(f"Parameter 'config_file_name' expect type str, got {type(config_file_name).__name__} instead.")
 
     makedirs(config_folder, exist_ok=True)
-    config_path = fr"{config_folder}\{config_file_name}"
+    config_path = path.join(config_folder, config_file_name)
 
     if not path.exists(config_path):
         with open(config_path, "w") as temp:
@@ -169,13 +169,14 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
         return
     
     try:
-        with open(config_path, "r") as file:
+        with open(config_path) as file:
             config = json.load(file)
     except json.JSONDecodeError:
         with open(config_path, "w") as file:
             json.dump(def_config, file, ensure_ascii=False, indent=4)
         return
     
+
     if def_config.keys() != config.keys():
         with open(config_path, "w") as file:
             json.dump(def_config, file, ensure_ascii=False, indent=4)
