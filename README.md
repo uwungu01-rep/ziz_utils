@@ -2,7 +2,7 @@
 
 A collection of Python function that I used in my projects.
 
-## Contains
+## Functionalities
 ### Update 1.0.0
 ```python
 isInt(input: str) #Check if input of type str is an integer or not.
@@ -12,12 +12,12 @@ menu(config: Container, start: int = 1, trailing_dot: bool = True, roman_numeral
 ```
 
 ### Update 2.0.0
-```python
+```py
 config_manager(def_config: dict, config_folder: str, config_file_name: str) #Consult the docstring of this function.
 write_config(config_path: str, config: dict, def_config: dict) #Consult the docstring of this function.
 ```
 ### Update 3.0.0
-```python
+```py
 menu(config: Container,
      option_prefix: str = "".strip(),
      option_suffix: str = "".strip(),
@@ -25,6 +25,10 @@ menu(config: Container,
      trailing_dot: bool = True,
      roman_numeral_mode: bool = False
 ) #A menu generator, consult the docstring of this function for more information. This is the 3.0.0 version
+```
+### Update 4.0.0
+```py
+validate_param(param: object, name: str, expected_type: type) #Checking the type of a paramer and throwing an error if not match.
 ```
 And more! (hopefully)
 
@@ -36,7 +40,7 @@ And more! (hopefully)
     <li>
     Open terminal, run:
     
-```terminal
+```
 pip install ziz_utils
 ```
 </li>

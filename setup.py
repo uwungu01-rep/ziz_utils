@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = "3.1.0"
+VERSION = "4.0.1"
 DESCRIPTION = "A collection of Python function that I used in my projects."
 with open("README.md") as file:
     LONG_DESCRIPTION = file.read()

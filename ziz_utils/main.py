@@ -1,7 +1,7 @@
-import json
 from os import makedirs, path, system
 from sys import platform
 from collections.abc import Container
+import json
 
 def isInt(input: str) -> bool:
     """
@@ -9,8 +9,7 @@ def isInt(input: str) -> bool:
     """
     if isinstance(input, int):
         raise ValueError("Already an int.")
-    if not isinstance(input, str):
-        raise TypeError(f"Parameter 'input' expect str, got {type(input).__name__} instead.")
+    validate_param(input, "input", int)
     
     try:
         int(input)
@@ -31,8 +30,7 @@ def num_to_roman(input: int) -> str:
     """
     Convert input (of type int), into Roman numerals.
     """
-    if not isinstance(input, int):
-        raise TypeError(f"Parameter 'input' expects type int, got {type(input).__name__} instead.")
+    validate_param(input, "input", int)
 
     roman: str = ""
     number_map: dict[str, int] = {
@@ -45,16 +43,37 @@ def num_to_roman(input: int) -> str:
         while input >= value:
             roman += number_map[value]
             input -= value
-
     return roman
 
-def menu(config: Container,
-         option_prefix: str = "".strip(),
-         option_suffix: str = "".strip(),
-         start: int = 1,
-         trailing_dot: bool = True,
-         roman_numeral_mode: bool = False
-         ) -> str:
+def validate_param(param: object, name: str, expected_type: type) -> None:
+    """
+    Checking parameter's type and raise a generic error message if type is different than what expected.
+
+    :type param: object
+    :param param: The parameter, or rather its value.
+
+    :type name: str:
+    :param name: The name of the parameter.
+    
+    :type expected_type: type
+    :param expected_type: The expected type of param, throw an error message if this don't match.
+    """
+    if not isinstance(name, str):
+        raise TypeError(f"Parameter 'expected_type' expect type type, got {type(param).__name__} instead.")
+    if not isinstance(expected_type, type):
+        raise TypeError(f"Parameter 'name' expect str, got {type(param).__name__} instead.")
+
+    if not isinstance(param, expected_type):
+        raise TypeError(f"Parameter '{name}' expect type {expected_type.__name__}, got {type(param).__name__} instead.")
+
+def menu(
+        config: Container,
+        option_prefix: str = "",
+        option_suffix: str = "",
+        start: int = 1,
+        trailing_dot: bool = True,
+        roman_numeral_mode: bool = False
+    ) -> str:
     """
     Generate the options in a menu.
 
@@ -63,33 +82,39 @@ def menu(config: Container,
     + Accept any container type
     + For any container but dict, the items in the said container will be the option for the menu.
     + For dict, the keys in the dict will the options and the value.
-    + Do note that whitespace in str will also count into the option.
+    + Do note that whitespace(s) in str will also count into the option.
+    
     :type option_prefix: str
     :param option_prefix: The prefix of the options. Empty by default.
+
     :type option_suffix: str
     :param option_suffix: The suffix of the options. Empty by default.
+
     :type start: int
     :param start: Accept int. Specify where to start generate a menu. Default is 1.
+
     :type trailing_dot: bool
     :param trailing_dot: Accept bool. Decide whether option should end with a dot. Default is True.
+
     :type roman_numeral_mode: bool
     :param roman_numeral_mode: Decide whether or not to use Roman numerals instead of integer. Default is False.
     """
-    if not isinstance(config, Container):
-        raise TypeError(f"Parameter 'config' expect container type (e.g list, str, dict,...), got {type(config).__name__} instead.")
-    if not isinstance(option_prefix, Container):
-        raise TypeError(f"Parameter 'option_prefix' expect type str, got {type(config).__name__} instead.")
-    if not isinstance(option_suffix, Container):
-        raise TypeError(f"Parameter 'option_suffix' expect type str, got {type(config).__name__} instead.")
-    if not isinstance(start, int):
-        raise TypeError(f"Parameter 'start' expect int, got {type(start).__name__} instead.")
-    if not isinstance(trailing_dot, bool):
-        raise TypeError(f"Parameter 'trailing_dot' expect bool, got {type(trailing_dot).__name__} instead.")
-    if not isinstance(roman_numeral_mode, bool):
-        raise TypeError(f"Parameter 'roman_numeral_mode' expect bool, got {type(trailing_dot).__name__} instead.")
+    param_tuples: list[tuple[object, str, type]] = [
+        (config, "config", Container),
+        (option_prefix, "option_prefix", str),
+        (option_suffix, "option_suffix", str),
+        (start, "start", int),
+        (trailing_dot, "trailing_dot", bool),
+        (roman_numeral_mode, "roman_numeral_mode", bool),
+    ]
+    for i, j, k in param_tuples:
+        validate_param(i, j, k)
+
     if isinstance(config, dict):
         config = [x for x in config.keys()]
 
+    option_prefix = option_prefix.strip()
+    option_suffix = option_suffix.strip()
     if option_prefix:
         option_prefix += " "
     if option_suffix:
@@ -118,21 +143,24 @@ def write_config(def_config: dict, config: dict, config_folder: str, config_file
 
     :type def_config: dict
     :param def_config: The default config.
+
     :type config: dict
-    :param config: The config.
+    :param config: The current config.
+
     :type config_folder: str
     :param config_folder: The path to the folder contains the config file.
+
     :type config_file_name: str
     :param config_file_name: The name of the config file.
     """
-    if not isinstance(config, dict):
-        raise TypeError(f"Parameter 'config' expect type dict, got {type(config).__name__} instead.")
-    if not isinstance(def_config, dict):
-        raise TypeError(f"Parameter 'def_config' expect type dict, got {type(def_config).__name__} instead.")
-    if not isinstance(config_folder, str):
-        raise TypeError(f"Parameter 'config_path' expect type str, got {type(config_folder).__name__} instead.")
-    if not isinstance(config_file_name, str):
-        raise TypeError(f"Parameter 'config_file_name' expect type str, got {type(config_file_name).__name__} instead.")
+    param_tuples: list[tuple[object, str, type]] = [
+        (def_config, "def_config", dict),
+        (config, "config", dict),
+        (config_folder, "config_folder", str),
+        (config_file_name, "config_file_name", str)
+    ]
+    for i, j, k in param_tuples:
+        validate_param(i, j, k)
 
     config_path = path.join(config_folder, config_file_name)
     try:
@@ -148,17 +176,20 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
 
     :type def_config: dict
     :param def_config: The default config.
+
     :type config_folder: str
     :param config_folder: The path to the folder contains the config file.
+
     :type config_file_name: str
     :param config_file_name: The name of the config file.
     """
-    if not isinstance(def_config, dict):
-        raise TypeError(f"Parameter 'def_config' expect type dict, got {type(def_config).__name__} instead.")
-    if not isinstance(config_folder, str):
-        raise TypeError(f"Parameter 'config_path' expect type str, got {type(config_folder).__name__} instead.")
-    if not isinstance(config_file_name, str):
-        raise TypeError(f"Parameter 'config_file_name' expect type str, got {type(config_file_name).__name__} instead.")
+    param_tuples: list[tuple[object, str, type]] = [
+        (def_config, "def_config", dict),
+        (config_folder, "config_folder", str),
+        (config_file_name, "config_file_name", str)
+    ]
+    for i, j, k in param_tuples:
+        validate_param(i, j, k)
 
     makedirs(config_folder, exist_ok=True)
     config_path = path.join(config_folder, config_file_name)
