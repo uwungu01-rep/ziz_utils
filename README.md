@@ -28,7 +28,12 @@ menu(config: Container,
 ```
 ### Update 4.0.0
 ```py
-validate_param(param: object, name: str, expected_type: type) #Checking the type of a paramer and throwing an error if not match.
+validate_param(param: object, name: str, expected_type: type) #Check the type of param and throw an error if not match the expected_type.
+```
+### Update 5.0.0
+```py
+is_prime(input: int) #Check if input (of type int) is a prime number or not.
+first_n_primes(n: int) #Generate the first n prime number(s).
 ```
 And more! (hopefully)
 
@@ -40,7 +45,7 @@ And more! (hopefully)
     <li>
     Open terminal, run:
     
-```
+```shell
 pip install ziz_utils
 ```
 </li>

@@ -47,7 +47,7 @@ def num_to_roman(input: int) -> str:
 
 def validate_param(param: object, name: str, expected_type: type) -> None:
     """
-    Checking parameter's type and raise a generic error message if type is different than what expected.
+    Checking parameter's type and raise a generic error message if type is different from what expected.
 
     :type param: object
     :param param: The parameter, or rather its value.
@@ -56,7 +56,7 @@ def validate_param(param: object, name: str, expected_type: type) -> None:
     :param name: The name of the parameter.
     
     :type expected_type: type
-    :param expected_type: The expected type of param, throw an error message if this don't match.
+    :param expected_type: The expected type of param, throw an error message if this doesn't match.
     """
     if not isinstance(name, str):
         raise TypeError(f"Parameter 'expected_type' expect type type, got {type(param).__name__} instead.")
@@ -78,12 +78,8 @@ def menu(
     Generate the options in a menu.
 
     :type config: Container
-    :param config:
-    + Accept any container type
-    + For any container but dict, the items in the said container will be the option for the menu.
-    + For dict, the keys in the dict will the options and the value.
-    + Do note that whitespace(s) in str will also count into the option.
-    
+    :param config: The options in the menu.
+
     :type option_prefix: str
     :param option_prefix: The prefix of the options. Empty by default.
 
@@ -97,7 +93,7 @@ def menu(
     :param trailing_dot: Accept bool. Decide whether option should end with a dot. Default is True.
 
     :type roman_numeral_mode: bool
-    :param roman_numeral_mode: Decide whether or not to use Roman numerals instead of integer. Default is False.
+    :param roman_numeral_mode: Decide whether to use Roman numerals instead of integer or not. Default is False.
     """
     param_tuples: list[tuple[object, str, type]] = [
         (config, "config", Container),
@@ -168,7 +164,7 @@ def write_config(def_config: dict, config: dict, config_folder: str, config_file
             json.dump(config, temp, ensure_ascii = False, indent = 4)
     except FileNotFoundError:
         config_manager(def_config, config_folder, config_file_name)
-        write_config(config_path, config, config_folder, config_file_name)
+        write_config(def_config, config, config_folder, config_file_name)
 
 def config_manager(def_config: dict, config_folder: str, config_file_name: str) -> None:
     """
@@ -198,7 +194,7 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
         with open(config_path, "w") as temp:
             json.dump(def_config, temp, ensure_ascii=False, indent=4)
         return
-    
+
     try:
         with open(config_path) as file:
             config = json.load(file)
@@ -220,3 +216,37 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
             with open(config_path, "w") as file:
                 json.dump(def_config, file, ensure_ascii=False, indent=4)
             return
+
+def is_prime(input: int) -> bool:
+    """
+    Check if input is a prime number or not.
+
+    :type input: int
+    :param input: The number you want to check.
+    """
+    validate_param(input, "input", int)
+    if input <= 1:
+        return False
+    for i in range(2, input):
+        if input % i == 0:
+            return False
+    return True
+
+def first_n_primes(n: int) -> list[int]:
+    """
+    Return a list[int] of the first n prime number(s).
+
+    :type n: int
+    :param n: The number of prime number.
+    """
+    validate_param(n, "n", int)
+    if n >= 0:
+        raise ValueError("The number of prime numbers cannot be equal or less than 0.")
+
+    primes = []
+    num = 2  # Start checking from the number 2
+    while len(primes) < n:
+        if is_prime(num):
+            primes.append(num)
+        num += 1
+    return primes
