@@ -217,18 +217,18 @@ def config_manager(def_config: dict, config_folder: str, config_file_name: str) 
                 json.dump(def_config, file, ensure_ascii=False, indent=4)
             return
 
-def is_prime(input: int) -> bool:
+def is_prime(number: int) -> bool:
     """
-    Check if input is a prime number or not.
+    Check if number is a prime number or not.
 
-    :type input: int
-    :param input: The number you want to check.
+    :type number: int
+    :param number: The number you want to check.
     """
-    validate_param(input, "input", int)
-    if input <= 1:
+    validate_param(number, "number", int)
+    if number <= 1:
         return False
-    for i in range(2, input):
-        if input % i == 0:
+    for i in range(2, number):
+        if number % i == 0:
             return False
     return True
 
@@ -240,7 +240,7 @@ def first_n_primes(n: int) -> list[int]:
     :param n: The number of prime number.
     """
     validate_param(n, "n", int)
-    if n >= 0:
+    if n <= 0:
         raise ValueError("The number of prime numbers cannot be equal or less than 0.")
 
     primes = []
