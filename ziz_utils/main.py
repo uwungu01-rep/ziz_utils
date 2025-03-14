@@ -9,7 +9,7 @@ def isInt(input: str) -> bool:
     """
     if isinstance(input, int):
         raise ValueError("Already an int.")
-    validate_param(input, "input", int)
+    validate_param(input, "input", str)
     
     try:
         int(input)
